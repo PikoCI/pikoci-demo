@@ -1,9 +1,10 @@
 secret_type "env" {
-  source = "pikoci://env"
-  params { file = ".env" }
+  source = "pikoci://file"
+  path   = ".env"
 }
 
 variable "github_token" {
+  type = string
   secret "env" { key = "GITHUB_TOKEN" }
 }
 
@@ -43,7 +44,10 @@ job "build" {
   get "git" "pr" { trigger = true }
   notify "github-check" "pr-status" { status = "in_progress" }
   task "build" {
-    run "exec" { path = "make" args = ["build"] }
+    run "exec" {
+      path = "make"
+      args = ["build"]
+    }
   }
   on_success {
     notify "github-check" "pr-status" { conclusion = "success" }
@@ -60,7 +64,10 @@ job "lint" {
   get "git" "pr" { trigger = true }
   notify "github-check" "pr-status" { status = "in_progress" }
   task "lint" {
-    run "exec" { path = "make" args = ["lint"] }
+    run "exec" {
+      path = "make"
+      args = ["lint"]
+    }
   }
   on_success {
     notify "github-check" "pr-status" { conclusion = "success" }
@@ -77,7 +84,10 @@ job "test" {
   get "git" "pr" { trigger = true }
   notify "github-check" "pr-status" { status = "in_progress" }
   task "test" {
-    run "exec" { path = "make" args = ["test"] }
+    run "exec" {
+      path = "make"
+      args = ["test"]
+    }
   }
   on_success {
     notify "github-check" "pr-status" { conclusion = "success" }
